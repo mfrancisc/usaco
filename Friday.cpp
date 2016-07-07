@@ -9,6 +9,10 @@ LANG: C++
 
 using namespace std;
 
+bool leap(int y){
+    return (y % 100 == 0 && y % 400 == 0 || y % 100 != 0 && y % 4 == 0);
+}
+
 int main() {
 
     ofstream fout ("friday.out");
@@ -18,29 +22,32 @@ int main() {
 
     fin>>N;
 
-    int startYear = 1900;
-    int lastYear = startYear + N - 1;
 
-    int months[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-    int days[7] = {0, 0, 0, 0, 0, 0, 0}; // from saturday to friday
+    int months[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int days[7] = {0, 0, 0, 0, 0, 0, 0}; 
 
     // 1 jan 1900 is monday
-    int d = 0;
+    int day = 2;
 
     // years loop
-    for(int y = startYear; y <= lastYear; y++) {
-        // leap year febrary 29
-        if(y % 4 == 0 && y % 100 != 0) {months[1] = 29; } 
-        else if( y % 100 == 0 && y % 400 == 0) {months[1] = 29;} 
+    for(int y = 1900; y < 1900 + N; y++) {
 
         // months lopp
         for(int m = 0; m < 12; m++) {
-            // month days lopp
 
+            int daysInMonth =months[m];
+            if(m == 1 && leap(y)) daysInMonth++;
 
+            for(int d = 1; d <= daysInMonth; d++){
+                cout << day << endl;
+                if(d == 13) {days[day]++;}
+                day = (day + 1) % 7;
+            }
         }
+    }
 
-        fout << days[5] << " " << days[6] << " " << days[0] << " " << days[1] << " " << days[2] << " " << days[3] << " " << days[4] << " "; 
+    for(int i = 0; i < 7; i++){
+        fout << (i ? " " : "") << days[i];
     }
 
     return 0;
