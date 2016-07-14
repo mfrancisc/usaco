@@ -39,7 +39,6 @@ int main() {
             if(m == 1 && leap(y)) daysInMonth++;
 
             for(int d = 1; d <= daysInMonth; d++){
-                cout << day << endl;
                 if(d == 13) {days[day]++;}
                 day = (day + 1) % 7;
             }
@@ -49,6 +48,7 @@ int main() {
     for(int i = 0; i < 7; i++){
         fout << (i ? " " : "") << days[i];
     }
+    fout << endl;
 
     return 0;
 }
