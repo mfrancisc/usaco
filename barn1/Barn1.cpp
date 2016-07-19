@@ -6,8 +6,10 @@ LANG: C++
 #include<iostream>
 #include<fstream>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
+
 
 int main() {
 
@@ -34,12 +36,28 @@ int main() {
 
    sort(stallList, stallList+cows_in_stalls);
 
-   int min_boards=0;
-   for(int a = 1; a < cows_in_stalls; a++){
-       cout << stallList[a] << endl;
-       cout <<  stallList[a-1] << endl;
-       cout << " *** " << endl;
-        min_boards += stallList[a] - stallList[a-1]; 
+   vector<int>gaps;
+   // calc gaps
+   for(int i = 1; i < cows_in_stalls; i++){
+
+	   if(stallList[i] - stallList[i-1] > 1) {
+		   gaps.push_back(stallList[i] - stallList[i-1] - 1);
+	   }
+
+   }
+
+
+   // sort gaps
+   sort(gaps.begin(), gaps.end() );
+
+
+   int boards = gaps.size() + 1;
+   int min_boards=cows_in_stalls;
+   while(boards > max_boards_purchased){
+	int b = gaps.front();
+	gaps.erase(gaps.begin());
+	min_boards += b;
+	boards--;
    }
 
    fout << min_boards << endl;
