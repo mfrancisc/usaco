@@ -1,79 +1,26 @@
 /*
 ID: muntean3
 PROG: combo
-LANG: C++
+LANG: C++11
 */
 
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <string>
-#include <map>
 
 using namespace std;
 
-map <string, int>combos[310];
-int N;
+int N,a,b,c,d,e,f;
+int cnt;
 
-void calcCombos(vector<vector <int> > arr) {
+bool check(int a, int b){
+    if(abs(a - b) <= 2) return true;
+    if(abs(a - b) >= N - 2) return true;
 
-	int first, second, third;
-	for(int a = 0; a < 5; a++){
-		first = arr[0][a];
-		for(int b = 0; b < 5; b++){
-
-			second = arr[1][b];
-			for(int c = 0; c < 5; c++){
-
-				third = arr[2][c];
-				int cur_combo = to_string(first) + to_string(second) + to_string(third);
-
-				if(!combos[cur_combo]) {
-					cout << cur_combo << endl;
-					combos[cur_combo] = 1;
-				}
-			}
-		}
-	}
-
+    return false;
 }
+bool check_combo(int a1, int b1, int c1){
 
-void printAll(vector<vector <int> > arr){
-
-	
-	for(int i = 0; i < 3; i++) {
-		for(int e = 0; e < 5; e++) {
-			cout << arr[i][e] << endl;
-		}
-	}
-
-
-}
-
-void addDials(vector<vector<int> > &arr) {
-
-	for(int i = 0; i < 3; i++) {
-
-		// - 2 calc
-		int t = arr[i][2] - 2;
-		if(t <= 0) t = N + t;	// + * - = -
-		arr[i][0] = t;
-		t++;
-		if(t > N) t = t - N;	
-		arr[i][1] = t;
-
-		// + 2 calc
-		t = arr[i][2] + 1;
-		if(t > N) t = t - N;	
-		arr[i][3] = t;
-		t++;
-		if(t > N) t = t - N;	
-		arr[i][4] = t;
-	}
-
-	// print all
-	//printAll(arr);
-
+    return (check(a1, a) && check(b1, b) && check(c1, c)) || (check(a1, d) && check(b1, e) && check(c1, f));
 }
 
 int main() {
@@ -81,48 +28,18 @@ int main() {
 	ifstream fin("combo.in");
 	ofstream fout("combo.out");
 
-	vector<vector <int> > farmer;
-	farmer.resize(3);
-	farmer[0].resize(5);
-	farmer[1].resize(5);
-	farmer[2].resize(5);
-	vector<vector <int> > master;
-	master.resize(3);
-	master[0].resize(5);
-	master[1].resize(5);
-	master[2].resize(5);
 
 	fin>>N;
+    fin>>a>>b>>c>>d>>e>>f;
 
-	int cod;
-	fin>>cod;
-	farmer[0][2] = cod;
-	fin>>cod;
-	farmer[1][2] = cod;
-	fin>>cod;
-	farmer[2][2] = cod;
+    for(int a1 = 1; a1 <= N; a1++){
+        for(int b1 = 1; b1 <= N; b1++){
+            for(int c1 = 1; c1 <= N; c1++){
+                if(check_combo(a1, b1, c1)) cnt++;
+            }
+        }
+    }
 
-	
-	fin>>cod;
-	master[0][2] = cod;
-	fin>>cod;
-	master[1][2] = cod;
-	fin>>cod;
-	master[2][2] = cod;
-
-	addDials(farmer);
-	addDials(master);
-	//printAll(master);
-
-
-	calcCombos(farmer);
-	calcCombos(master);
-	
-	int cnt = 0;
-	for(int i = 0; i < 310; i++){
-		if(combos[i]) cnt++;
-	}
-	
-	cout << cnt << endl;
+	fout << cnt << endl;
 
 }
