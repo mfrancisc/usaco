@@ -1,0 +1,94 @@
+/**
+ID: muntean3
+PROG: skidesign
+LANG: C++11
+*/
+
+#include<iostream>
+#include<fstream>
+#include<algorithm>
+#include<math.h>
+
+using namespace std;
+
+int N;
+int main(void){
+
+    ifstream fin("skidesign.in");
+    fin>>N;
+    int hillsHeight[N];
+
+    int h;
+    for(int i = 0; i < N; i++) {
+        fin>> h;
+        hillsHeight[i] = h;
+    }
+//	for (int i = 0; i != N; ++i)
+//		cout << hillsHeight[i] << " ";
+//	cout << endl;
+
+    // sort heigths
+    sort(hillsHeight, hillsHeight+N);
+	//for (int i = 0; i != N; ++i)
+	//	cout << hillsHeight[i] << " ";
+	//cout << endl;
+
+    int newMaxDiff = hillsHeight[N-1] - hillsHeight[0];
+    int cost = 0;
+    int costMax;
+    int costMin;
+    while(17 < newMaxDiff){
+
+        costMax = 0;
+        costMin = 0;
+
+        int hMin = 0;
+        int hMax = 0;
+        int maxDiff = newMaxDiff;
+
+        cout << " min: " << hillsHeight[0] << endl;
+         cout << " max: " << hillsHeight[N-1] << endl;
+        while(17 < maxDiff ){
+
+            // add to min hill
+            hillsHeight[0]++;
+            hMin++;
+            costMin = pow(hMin, 2);
+
+            // test if we have required max limit
+            maxDiff = hillsHeight[N-1] - hillsHeight[0];
+            if(maxDiff <= 17) break;
+
+            // subract from max hill
+            hillsHeight[N-1] = hillsHeight[N-1] - 1;
+            hMax++;
+            costMax = pow(hMax, 2);
+            maxDiff = hillsHeight[N-1] - hillsHeight[0];
+        }
+         //   cout << " min after: " << hillsHeight[0] << endl;
+          //  cout << " max after: " << hillsHeight[N-1] << endl;
+            //cout << " hMin: " << hMin << endl;
+            //cout << " hMax: " << hMax << endl;
+
+	cout << "cmin : " << costMin << endl;
+	cout << "cmax : " << costMax << endl;
+
+        cost += costMin + costMax;
+	cout << "cost : " << cost << endl;
+        sort(hillsHeight, hillsHeight+N);
+
+	for (int i = 0; i != N; ++i)
+		cout << hillsHeight[i] << " ";
+	cout << endl;
+
+	    cout << " *********** " << endl;
+        newMaxDiff = hillsHeight[N-1] - hillsHeight[0];
+    }
+
+    // calc total cost
+    ofstream fout("skidesign.out");
+    fout << cost << endl;
+    fout.close();
+
+    return 0;
+}
